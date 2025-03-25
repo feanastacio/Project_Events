@@ -1,0 +1,267 @@
+[
+  {
+    "ContainingType": "Api_Event.Repositories.Api_Event.Controllers.EventoController",
+    "Method": "Post",
+    "RelativePath": "api/Evento",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "novoEvento",
+        "Type": "Api_Event.Domains.Evento",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Repositories.Api_Event.Controllers.EventoController",
+    "Method": "Get",
+    "RelativePath": "api/Evento/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Repositories.Api_Event.Controllers.EventoController",
+    "Method": "Delete",
+    "RelativePath": "api/Evento/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Repositories.Api_Event.Controllers.EventoController",
+    "Method": "Put",
+    "RelativePath": "api/Evento/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "evento",
+        "Type": "Api_Event.Domains.Evento",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Repositories.Api_Event.Controllers.EventoController",
+    "Method": "GetByid",
+    "RelativePath": "api/Evento/BuscarPorid/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Controllers.TipoDeEventoController",
+    "Method": "Post",
+    "RelativePath": "api/TipoDeEvento",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "novoTipoDeEvento",
+        "Type": "Api_Event.Domains.TipoDeEvento",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Controllers.TipoDeEventoController",
+    "Method": "Put",
+    "RelativePath": "api/TipoDeEvento/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "tipoDeEvento",
+        "Type": "Api_Event.Domains.TipoDeEvento",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Controllers.TipoDeEventoController",
+    "Method": "Delete",
+    "RelativePath": "api/TipoDeEvento/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Controllers.TipoDeEventoController",
+    "Method": "Get",
+    "RelativePath": "api/TipoDeEvento/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Controllers.TipoDeUsuarioController",
+    "Method": "Post",
+    "RelativePath": "api/TipoDeUsuario/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "novoUsuario",
+        "Type": "Api_Event.Domains.Usuario",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Controllers.TipoDeUsuarioController",
+    "Method": "Delete",
+    "RelativePath": "api/TipoDeUsuario/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Controllers.TipoDeUsuarioController",
+    "Method": "Put",
+    "RelativePath": "api/TipoDeUsuario/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "novoTipoDeUsuario",
+        "Type": "Api_Event.Domains.TipoDeUsuario",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Controllers.TipoDeUsuarioController",
+    "Method": "Get",
+    "RelativePath": "api/TipoDeUsuario/BuscarPorid/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Controllers.UsuarioController",
+    "Method": "Cadastrar",
+    "RelativePath": "api/Usuario/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "novoUsuario",
+        "Type": "Api_Event.Domains.Usuario",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Api_Event.Controllers.UsuarioController",
+    "Method": "GetById",
+    "RelativePath": "api/Usuario/BuscarPorId/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
