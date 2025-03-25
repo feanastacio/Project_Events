@@ -18,11 +18,11 @@ namespace Api_Event.Controllers
 
         //Metodo Cadastrar 
         [HttpPost("{id}")]
-        public IActionResult Post(Usuario novoUsuario)
+        public IActionResult Post(TipoDeUsuario novoTipoUsuario)
         {
             try
             {
-                _tipoDeUsuarioRepository.Cadastrar(novoUsuario);
+                _tipoDeUsuarioRepository.Cadastrar(novoTipoUsuario);
                 return Created();
             }
             catch (Exception)

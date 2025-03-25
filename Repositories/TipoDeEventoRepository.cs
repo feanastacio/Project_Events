@@ -27,6 +27,7 @@ namespace Api_Event.Repositories
                 {
                     tipoEventoBuscado.TituloTipoEvento = tipoDeEvento.TituloTipoEvento;
                 }
+                _context.TipoDeEventos.Update(tipoEventoBuscado!);
                 _context.SaveChanges();
             }
             catch (Exception)
@@ -40,12 +41,10 @@ namespace Api_Event.Repositories
         {
             try
             {
-                TipoDeEvento tipoDeEvento = _context.TipoDeEventos.Find(id)!;
-                return tipoDeEvento;
+               return _context.TipoDeEventos.Find(id)!;
             }
             catch (Exception)
             {
-
                 throw;
             }
            
@@ -56,6 +55,7 @@ namespace Api_Event.Repositories
         {
             try
             {
+                novoTipoDeEvento.TipoDeEventoid = Guid.NewGuid();
                 _context.TipoDeEventos.Add(novoTipoDeEvento);
                 _context.SaveChanges();
             }
@@ -73,7 +73,7 @@ namespace Api_Event.Repositories
                 TipoDeEvento eventoBuscado = _context.TipoDeEventos.Find(Id)!;
                 if (eventoBuscado != null)
                 {
-                    _context.Remove(eventoBuscado);
+                    _context.TipoDeEventos.Remove(eventoBuscado);
                 }
                 _context.SaveChanges();
             }
@@ -88,8 +88,7 @@ namespace Api_Event.Repositories
         {
             try
             {
-                List<TipoDeEvento> listaTipoDeEventos = _context.TipoDeEventos.ToList();
-                return listaTipoDeEventos;
+                return _context.TipoDeEventos.OrderBy(tp => tp.TituloTipoEvento).ToList();
             }
             catch (Exception)
             {

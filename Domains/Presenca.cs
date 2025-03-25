@@ -12,7 +12,7 @@ namespace Api_Event.Domains
     {
         [Key]
 
-        public Guid Presencaid { get; set; }
+        public Guid PresencaId { get; set; }
 
         
         [Column(TypeName = "BIT")]

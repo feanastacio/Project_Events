@@ -35,13 +35,11 @@ namespace Api_Event.Domains
         public TipoDeEvento? TipoDeEvento { get; set; }
 
 
-
-
         [Required(ErrorMessage = "Campo obrigatorio")]
         public Guid Instituicaoid { get; set; }
 
         [ForeignKey("Instituicaoid")]
-        public Instituicao? instituicao { get; set; }
+        public Instituicoes? instituicao { get; set; }
 
         
         

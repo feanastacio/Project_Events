@@ -4,25 +4,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api_Event.Domains
 {
-    [Table("Instituicao")]
+    [Table("Instituicoes")]
     [Index(nameof(CNPJ), IsUnique = true)]
-    public class Instituicao
+    public class Instituicoes
     {
         [Key]
+        public Guid Instituicaoid { get; set; }
 
-        public Guid Institucaoid { get; set; }
-        
-        [Column(TypeName = "VARCHAR(14)" )]
-        [Required(ErrorMessage = "o CNPJ é obrigatório")]
+        [Column(TypeName = "VARCHAR(14)")]
+        [Required(ErrorMessage = "Cnpj obrigatório!")]
         [StringLength(14)]
-        public string? CNPJ { get;set; }
+        public string? CNPJ { get; set; }
 
         [Column(TypeName = "VARCHAR(100)")]
-        [Required(ErrorMessage = "o endereço é obrigatório")]
-        public string? Endereco {  get;set; }
+        [Required(ErrorMessage = "Endereço obrigatório!")]
+        public string? Endereco { get; set; }
 
         [Column(TypeName = "VARCHAR(100)")]
-        [Required(ErrorMessage = "o nome é obrigatório")]
+        [Required(ErrorMessage = "Nome Fantasia obrigatório!")]
         public string? NomeFantasia { get; set; }
 
     }

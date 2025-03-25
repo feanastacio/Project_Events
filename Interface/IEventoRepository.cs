@@ -6,7 +6,7 @@ namespace Api_Event.Interface
     {
         void Cadastrar(Evento evento);
         List<Evento> ProximosEventos();
-        List<Evento> ListarPorId(int id);
+        List<Evento> ListarPorId(Guid id);
         List<Evento> Listar();
         Evento BuscarPorid(Guid id);
         void Atualizar(Guid id, Evento evento);

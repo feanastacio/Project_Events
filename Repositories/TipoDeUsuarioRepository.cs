@@ -15,8 +15,8 @@ namespace Api_Event.Repositories
                 if (tipoDeUsuario != null)
                 {
                     tipoDeUsuarioBuscado.TituloTipoUsuario = tipoDeUsuario.TituloTipoUsuario;
-                    tipoDeUsuarioBuscado.TipoDeUsuarioid = tipoDeUsuario.TipoDeUsuarioid;
                 }
+                _context.TipoDeUsuario.Update(tipoDeUsuarioBuscado);
                 _context.SaveChanges();
             }
             catch (Exception)
@@ -28,9 +28,8 @@ namespace Api_Event.Repositories
         public TipoDeUsuario BuscarPorid(Guid id)
         {
             try
-            {
-                TipoDeUsuario tipoDeUsuarioBuscado = _context.TipoDeUsuario.Find(id)!;
-                return tipoDeUsuarioBuscado;
+            {        
+                return _context.TipoDeUsuario.Find(id);
             }
             catch (Exception)
             {
@@ -42,6 +41,7 @@ namespace Api_Event.Repositories
         {
             try
             {
+                novoTipoDeUsuario.TipoDeUsuarioid = Guid.NewGuid();
                 _context.TipoDeUsuario.Add(novoTipoDeUsuario);
                 _context.SaveChanges();
             }
@@ -73,12 +73,11 @@ namespace Api_Event.Repositories
             }
         }
 
-        public List<TipoDeEvento> Listar()
+        public List<TipoDeUsuario> Listar()
         {
             try
             {
-                List<TipoDeEvento> listaTipoDeEvento = _context.TipoDeEventos.ToList();
-                return listaTipoDeEvento;
+                return _context.TipoDeUsuario.ToList();
             }
             catch (Exception)
             {
