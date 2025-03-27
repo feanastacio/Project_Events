@@ -1,45 +1,28 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using api_filmes_senai.Domains;
 
-namespace Api_Event.Domains
+namespace Eveent_.Domains
 {
-
     [Table("Presenca")]
-    [Index(nameof(Situacao), IsUnique = true)]
-
     public class Presenca
     {
         [Key]
+        public Guid IdPresenca { get; set; }
 
-        public Guid PresencaId { get; set; }
-
-        
         [Column(TypeName = "BIT")]
-        [Required(ErrorMessage = "Campo obrigatorio!")]
-        public bool? Situacao { get; set; }
+        [Required(ErrorMessage = "A situção é obrigatoria")]
+        public bool Situacao { get; set; }
 
-        
-        
-        [Required(ErrorMessage = "Usuario obrigatorio")]
-        public Guid Usuarioid { get; set; } 
+        public Guid IdEventos { get; set; }
 
-        [ForeignKey("Usuarioid")]
-        public Usuario? Usuario { get; set; }
+        [ForeignKey("IdEventos")]
+        public Eventos? eventos { get; set; }
 
+        public Guid IdUsuario { get; set; }
 
-
-
-        [Required(ErrorMessage = "Evento obrigatorio")]
-        public Guid Eventoid { get; set; }
-
-        [ForeignKey("Eventoid")]
-        public Evento? Evento { get; set; }
-
-
-
-
-
-
+        [ForeignKey("IdUsuario")]
+        public Usuarios? Usuario { get; set; }
     }
 }
+ 

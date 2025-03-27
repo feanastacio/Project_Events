@@ -1,98 +1,124 @@
-﻿using Api_Event.Domains;
-using Api_Event.Interface;
+﻿using System.Diagnostics.Eventing.Reader;
+using Eveent_.Domains;
+using Eveent_.Interfaces;
+using Eveent_.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api_Event.Repositories
+namespace Event_.Controllers
 {
-    namespace Api_Event.Controllers
+    [Route("api/[controller]")]
+    [ApiController]
+    [Produces("application/json")]
+    public class EventoController : ControllerBase
     {
-        [Route("api/[controller]")]
-        [ApiController]
-        [Produces("application/json")]
-        public class EventoController : ControllerBase
+        private readonly IEventosRepository _EventosRepository;
+
+        public EventoController(IEventosRepository EventosRepository)
         {
-            private readonly IEventoRepository _eventoRepository;
-            public EventoController(IEventoRepository eventoRepository)
+            _EventosRepository = EventosRepository;
+        }
+
+        [HttpPost]
+        public IActionResult Post(Eventos eventoRepository)
+        {
+            try
             {
-                _eventoRepository = eventoRepository;
+                _EventosRepository.Cadastrar(eventoRepository);
+                return Created();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPut]
+        public IActionResult Put(Guid Id, Eventos evento)
+        {
+            try
+            {
+                _EventosRepository.Atualizar(Id, evento);
+                return NoContent();
+
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("{Id}")]
+        public IActionResult GetById(Guid Id)
+        {
+            try
+            {
+                Eventos EventoBuscado = _EventosRepository.BuscarPorId(Id);
+                return Ok(EventoBuscado);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
 
-            //Metodo Listar 
-            [HttpGet("{id}")]
-            public IActionResult Get()
+        }
+
+
+
+        [HttpDelete]
+        public IActionResult Delete(Guid Id)
+        {
+            try
             {
-                try
-                {
-                    List<Evento> listarEvento = _eventoRepository.Listar();
-                    return Ok(listarEvento);
-                }
-                catch (Exception e)
-                {
-                    return BadRequest(e.Message);
-                }
+                _EventosRepository.Deletar(Id);
+                return NoContent();
             }
-
-            //Metodo Cadastrar
-            [HttpPost]
-            public IActionResult Post(Evento novoEvento)
+            catch (Exception e)
             {
-                try
-                {
-                    _eventoRepository.Cadastrar(novoEvento);
-                    return Created();
-                }
-                catch (Exception e)
-                {
-                    return BadRequest(e.Message);
-                }
+                return BadRequest(e.Message);
             }
+        }
 
-            //Metodo Buscar
-            [HttpGet("BuscarPorid/{id}")]
-            public IActionResult GetByid(Guid id)
+        [HttpGet]
+        public IActionResult Get()
+        {
+            try
             {
-                try
-                {
-                    Evento eventoBuscado = _eventoRepository.BuscarPorid(id);
-                    return Ok(eventoBuscado);
-                }
-                catch (Exception e)
-                {
-                    return BadRequest(e.Message);
-                }
+                List<Eventos> ListaEvento = _EventosRepository.Listar();
+                return Ok(ListaEvento);
             }
-
-            //Metodo Deletar
-            [HttpDelete("{id}")]
-            public IActionResult Delete(Guid id)
+            catch (Exception e)
             {
-                try
-                {
-                    _eventoRepository.Deletar(id);
-                    return NoContent();
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+                return BadRequest(e.Message);
             }
+        }
 
-            //MetodoAtualizar
-            [HttpPut("{id}")]
-            public IActionResult Put(Guid id, Evento evento)
+        [HttpGet("{ListarId}")]
+        public IActionResult Get(Guid Id)
+        {
+            try
             {
-                try
-                {
-                    _eventoRepository.Atualizar(id, evento);
-                    return NoContent();
-                }
-                catch (Exception e)
-                {
-
-                    return BadRequest(e.Message);
-                }
+                List<Eventos> ListaEventoPorID = _EventosRepository.ListarPorId(Id);
+                return Ok(ListaEventoPorID);
             }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
+        [HttpGet("{ListarProximoEvento}")]
+        public IActionResult ListarProximoEvento()
+        {
+            try
+            {
+                List<Eventos> ListaProximoEvento = _EventosRepository.ListarProximosEventos();
+                return Ok(ListaProximoEvento);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

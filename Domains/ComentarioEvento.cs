@@ -1,42 +1,31 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using api_filmes_senai.Domains;
 
-namespace Api_Event.Domains
+namespace Eveent_.Domains
 {
     [Table("ComentarioEvento")]
-    [Index(nameof(Exibe), IsUnique = true)]
-
     public class ComentarioEvento
     {
         [Key]
-        public  Guid ComentarioEventoid { get; set; }
+        public Guid IdComentarioEvento { get; set; }
 
-        [Column(TypeName = "TEXT")]
-        [Required(ErrorMessage = "A descrição é obrigatória")]
-        public string? Comentario { get; set; }
-
+        [Column(TypeName = "VARCHAR(50)")]  
+        [Required(ErrorMessage = "A descrição e obrigatoria")]
+        public string? Descricao { get; set; }
 
         [Column(TypeName = "BIT")]
-        [Required(ErrorMessage = "A resposta é necessária")]
+        [Required(ErrorMessage = "O Exibir e obrigatoria")]
         public bool? Exibe { get; set; }
 
+        public Guid IdUsuario { get; set; }
 
+        [ForeignKey("IdUsuario")]
+        public Usuarios? Usuario { get; set; }
 
+        public Guid IdEventos { get; set; }
 
-        [Required(ErrorMessage = "Usuario obrigatorio")]
-        public Guid Usuarioid { get; set; }
-
-        [ForeignKey("Usuarioid")]
-        public Usuario? Usuario { get; set; }
-
-
-
-
-        [Required(ErrorMessage = "Evento obrigatorio")]
-        public Guid Eventoid { get; set; }
-
-        [ForeignKey("Eventoid")]
-        public Evento? Evento { get; set; }
+        [ForeignKey("IdEventos")]
+        public Eventos? Eventos { get; set; }
     }
 }

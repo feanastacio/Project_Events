@@ -1,42 +1,55 @@
-﻿using Api_Event.Context;
-using Api_Event.Domains;
-using Api_Event.Interface;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using api_filmes_senai.Domains;
+using Eveent_.Interfaces;
+using Eveent_.Context;
+using Eveent_.Domains;
+using Eveent_.Utils;
 
-namespace Api_Event.Repositories
+namespace Eveent_.Repositories
 {
     public class UsuarioRepository : IUsuarioRepository
     {
-        private readonly Event_Context _context;
-        public void Atualizar(Guid id, Usuario usuario) 
+        private readonly Eveent_Context _context;
+
+        public UsuarioRepository(Eveent_Context context)
+        {
+            _context = context;
+        }
+
+        public Usuarios BuscarPorEmailESenha(string email, string senha)
         {
             try
             {
-                Usuario usuarioBuscado = _context.Usuario.Find(id)!;
+                Usuarios usuarioBuscado = _context.Usuarios.FirstOrDefault(u => u.Email == email)!;
+
                 if (usuarioBuscado != null)
                 {
-                    usuarioBuscado.TipoDeUsuario = usuario.TipoDeUsuario;
-                    usuarioBuscado.TipoDeUsuarioid = usuario.TipoDeUsuarioid;
+                    bool confere = Criptografia.CompararHash(senha, usuarioBuscado.Senha!);
+
+                    if (confere)
+                    {
+                        return usuarioBuscado;
+                    }
                 }
+                return null!;
             }
             catch (Exception)
             {
+
                 throw;
             }
         }
 
-        public Usuario BuscarPorEmailESenha(string Email, string Senha)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Usuario BuscarPorid(Guid id)
+        public Usuarios BuscarPorId(Guid id)
         {
             try
             {
-                Usuario usuarioBuscado = _context.Usuario.Find()!;
-                return usuarioBuscado;
+                Usuarios usuarioBuscado = _context.Usuarios.Find(id)!;
+
+                if (usuarioBuscado != null)
+                {
+                    return usuarioBuscado;
+                }
+                return null!;
             }
             catch (Exception)
             {
@@ -44,25 +57,20 @@ namespace Api_Event.Repositories
             }
         }
 
-        public void Cadastrar(Usuario novoUsuario)
+        public void Cadastrar(Usuarios novoUsuario)
         {
             try
             {
-            _context.Usuario.Add(novoUsuario);
-            _context.SaveChanges();
+                novoUsuario.Senha = Criptografia.GerarHash(novoUsuario.Senha!);
+
+                _context.Usuarios.Add(novoUsuario);
+
+                _context.SaveChanges();
             }
             catch (Exception)
             {
                 throw;
             }
         }
-
-
-        public List<Usuario> ListaPorEmailESenha(string email, string senha)
-        {
-            throw new NotImplementedException();
-        }
-
-    
     }
 }

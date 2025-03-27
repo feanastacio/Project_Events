@@ -1,34 +1,29 @@
-﻿using Api_Event.Context;
-using Api_Event.Domains;
-using Api_Event.Interface;
+﻿using Eveent_.Domains;
+using Eveent_.Interfaces;
+using Eveent_.Context;
 
-namespace Api_Event.Repositories
+namespace Eveent_.Repositories
 {
-    public class PresencaRepository : IPresencaRepository
+    public class PresencasRepository : IPresencaRepository
     {
-        private readonly Event_Context? _context;
-        public PresencaRepository(Event_Context? context)
+        private readonly Eveent_Context _context;
+
+        public PresencasRepository(Eveent_Context context)
         {
             _context = context;
         }
 
-        public void Atualizar(Guid id, Presenca presencaEvento)
+        public void Atualizar(Guid id, Presenca presenca)
         {
             try
             {
-                Presenca presencaBuscada = _context.Presenca.Find(id)!;
-                if (presencasBuscada != null)
+                Presenca presencaBuscado = _context.Presenca.Find(id)!;
+
+                if (presencaBuscado != null)
                 {
-                    if (presencaBuscada.Situacao)
-                    {
-                        presencaBuscada.Situacao = false;
-                    } else
-                    {
-                        presencaBuscada.Situacao = true;
-                    }
+                    presencaBuscado.Situacao = presenca.Situacao;
                 }
-                _context.Presenca.Update(presencaBuscada!);
-                _context.SaveChanges(); 
+                _context.SaveChanges();
             }
             catch (Exception)
             {
@@ -36,28 +31,12 @@ namespace Api_Event.Repositories
             }
         }
 
-        public Presenca BuscarPorid(Guid id)
+        public Presenca BuscarPorId(Guid id)
         {
             try
             {
-               return _context.Presenca.Select(p => new Presenca
-               {
-                   PresencaId = p.PresencaId,
-                   Situacao = p.Situacao,
-                   Evento = new Evento
-                   {
-                       Eventoid = p.Eventoid,
-                       DataEvento = p.Evento.DataEvento,
-                       NomeEvento = p.Evento.NomeEvento,
-                       DescricaoEvento = p.Evento.DescricaoEvento,
-
-                       instituicao = new Instituicoes
-                       {
-                           Instituicaoid = p.Evento.instituicao.Instituicaoid,
-                           NomeFantasia = p.Evento.instituicao.NomeFantasia
-                       }
-                   }
-               }).FirstOrDefault(p => p.PresencaId == id)!;
+                Presenca presencaBuscado = _context.Presenca.Find(id)!;
+                return presencaBuscado;
             }
             catch (Exception)
             {
@@ -69,12 +48,13 @@ namespace Api_Event.Repositories
         {
             try
             {
-                Presenca presenca = _context?.Presenca.Find(id)!;
-                if (presenca != null)
+                Presenca presencaBuscado = _context.Presenca.Find(id)!;
+
+                if (presencaBuscado != null)
                 {
-                    _context?.Presenca.Remove(presenca);
+                    _context.Presenca.Remove(presencaBuscado);
                 }
-                _context?.SaveChanges();
+                _context.SaveChanges();
             }
             catch (Exception)
             {
@@ -82,13 +62,12 @@ namespace Api_Event.Repositories
             }
         }
 
-        public void Increver(Presenca inscricao)
+        public void Inscrever(Presenca inscreverPresenca)
         {
             try
             {
-                inscricao.PresencaId = Guid.NewGuid();
-                _context.Presenca.Add(inscricao);
-                _context?.SaveChanges();
+                _context.Presenca.Add(inscreverPresenca);
+                _context.SaveChanges();
             }
             catch (Exception)
             {
@@ -100,27 +79,8 @@ namespace Api_Event.Repositories
         {
             try
             {
-                return _context.Presenca
-                    .Select(p => new Presenca
-                    {
-                        PresencaId = p.PresencaId,
-                        Situacao = p.Situacao,
-
-                        Evento = new Evento
-                        {
-                            Eventoid = p.Eventoid,
-                            DataEvento = p.Evento!.DataEvento,
-                            NomeEvento = p.Evento.NomeEvento,
-                            DescricaoEvento = p.Evento.DescricaoEvento,
-
-                            instituicao = new Instituicoes
-                            {
-                                Instituicaoid = p.Evento.instituicao!.Instituicaoid,
-                                NomeFantasia = p.Evento.instituicao!.NomeFantasia
-                            }
-                        }
-
-                    }).ToList();
+                List<Presenca> listaPresenca = _context.Presenca.ToList();
+                return listaPresenca;
             }
             catch (Exception)
             {
@@ -130,26 +90,15 @@ namespace Api_Event.Repositories
 
         public List<Presenca> ListarMinhas(Guid id)
         {
-            return _context.Presenca.Select(p => new Presenca
+            try
             {
-                PresencaId = p.PresencaId,
-                Situacao = p.Situacao,
-                Usuarioid = p.Usuarioid,
-                Eventoid = p.Eventoid,
-
-                Evento = new Evento
-                {
-                    Eventoid = p.Eventoid,
-                    DataEvento = p.Evento.DataEvento,
-                    NomeEvento = p.Evento.NomeEvento,
-                    DescricaoEvento = p.Evento.DescricaoEvento,
-
-                    instituicao = new Instituicoes
-                    {
-                        Instituicaoid = p.Evento.Instituicaoid,
-                    }
-                }
-            }).Where(p => p.Usuarioid == id).ToList();
+                List<Presenca> listaPresenca = _context.Presenca.Where(p => p.IdUsuario == id).ToList();
+                return listaPresenca;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

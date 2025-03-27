@@ -1,30 +1,60 @@
-﻿using Api_Event.Domains;
-using Api_Event.Interface;
-using Api_Event.Repositories;
-using Microsoft.AspNetCore.Http;
+﻿using api_filmes_senai.Domains;
+using Eveent_.Interfaces;
+using Eveent_.Domains;
+using Eveent_.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api_Event.Controllers
+namespace Event_.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
+
     public class UsuarioController : ControllerBase
     {
-        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IUsuarioRepository _UsuarioRepository;
+
         public UsuarioController(IUsuarioRepository usuarioRepository)
         {
-            _usuarioRepository = usuarioRepository;
+            _UsuarioRepository = usuarioRepository;
         }
-      
-        //Metodo Buscar Por Id
-        [HttpGet("BuscarPorId/{id}")]
-        public IActionResult GetById(Guid id) 
+
+        [HttpGet("BuscarPorEmailESenha")]
+        public IActionResult Get(string email, string senha)
         {
             try
             {
-                Usuario usurioBuscado = _usuarioRepository.BuscarPorid(id);
-                return Ok(usurioBuscado);
+
+                Usuarios usuarioBuscado = _UsuarioRepository.BuscarPorEmailESenha(email, senha);
+
+                if (usuarioBuscado != null)
+                {
+                    return Ok(usuarioBuscado);
+                }
+                return null!;
+            }
+
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(Guid id)
+        {
+            try
+            {
+                Usuarios usuarioBuscado = _UsuarioRepository.BuscarPorId(id);
+
+
+                if (usuarioBuscado != null)
+                {
+                    return Ok(usuarioBuscado);
+                }
+
+                return null!;
             }
             catch (Exception e)
             {
@@ -32,20 +62,18 @@ namespace Api_Event.Controllers
             }
         }
 
-        //Metodo Cadastrar
-        [HttpPost("{id}")]
-        public IActionResult Cadastrar(Usuario novoUsuario)
+        [HttpPost]
+        public IActionResult Post(Usuarios novoUsuario)
         {
             try
             {
-                _usuarioRepository.Cadastrar(novoUsuario);
-                return Created();
+                _UsuarioRepository.Cadastrar(novoUsuario);
+                return StatusCode(201, novoUsuario);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest(e.Message);
+                throw;
             }
         }
-
     }
 }
