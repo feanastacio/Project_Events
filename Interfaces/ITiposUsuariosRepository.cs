@@ -1,14 +1,13 @@
-﻿using Eveent_.Domains;
+﻿using webapi.event_.Domains;
 
-namespace Eveent_.Interfaces
+namespace webapi.event_.Interfaces
 {
     public interface ITiposUsuariosRepository
     {
-        void Cadastrar(TiposUsuarios tiposUsuarios);
-        void Atualizar(Guid id, TiposUsuarios tiposUsuarios);
+        void Cadastrar(TiposUsuarios tipoUsuario);
         void Deletar(Guid id);
-        TiposUsuarios BuscarPorId(Guid id);
         List<TiposUsuarios> Listar();
+        TiposUsuarios BuscarPorId(Guid id);
+        void Atualizar(Guid id, TiposUsuarios tipoUsuario);
     }
 }
- 

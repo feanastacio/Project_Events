@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Eveent_.Domains
+namespace webapi.event_.Domains
 {
     [Table("TiposUsuarios")]
     public class TiposUsuarios
@@ -9,9 +9,8 @@ namespace Eveent_.Domains
         [Key]
         public Guid IdTipoUsuario { get; set; }
 
-        [Column(TypeName = "VARCHAR(50)")]
-        [Required(ErrorMessage = "O titulo de usuario e obrigatorio")]
+        [Column(TypeName = "VARCHAR(100)")]
+        [Required(ErrorMessage = "Tipo do usuário obrigatório!")]
         public string? TituloTipoUsuario { get; set; }
-
     }
 }

@@ -1,28 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
-namespace Eveent_.Domains
+namespace webapi.event_.Domains
 {
     [Table("Instituicoes")]
-    [Index(nameof(Cnpj), IsUnique = true)]
+    [Index(nameof(CNPJ), IsUnique = true)]
     public class Instituicoes
     {
         [Key]
         public Guid IdInstituicao { get; set; }
 
         [Column(TypeName = "VARCHAR(14)")]
-        [Required(ErrorMessage = "O Cnpj e obrigatorio")]
+        [Required(ErrorMessage = "Cnpj obrigatório!")]
         [StringLength(14)]
-        public string? Cnpj {  get; set; }
+        public string? CNPJ { get; set; }
 
         [Column(TypeName = "VARCHAR(100)")]
-        [Required(ErrorMessage = "O Endereco e obrigatorio")]
+        [Required(ErrorMessage = "Endereço obrigatório!")]
         public string? Endereco { get; set; }
 
         [Column(TypeName = "VARCHAR(100)")]
-        [Required(ErrorMessage = "O nome fantasia e obrigatorio")]
+        [Required(ErrorMessage = "Nome Fantasia obrigatório!")]
         public string? NomeFantasia { get; set; }
     }
-} 
- 
+}

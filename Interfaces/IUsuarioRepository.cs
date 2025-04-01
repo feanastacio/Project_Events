@@ -1,12 +1,14 @@
-﻿using api_filmes_senai.Domains;
+﻿using webapi.event_.Domains;
+using webapi.event_.DTO;
 
-namespace Eveent_.Interfaces
+namespace webapi.event_.Interfaces
 {
     public interface IUsuarioRepository
     {
-        void Cadastrar(Usuarios novoUsuario);
+        void Cadastrar(Usuarios usuario);
+
         Usuarios BuscarPorId(Guid id);
+
         Usuarios BuscarPorEmailESenha(string email, string senha);
     }
 }
- 

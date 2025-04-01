@@ -1,18 +1,18 @@
-﻿using Eveent_.Context;
-using Eveent_.Domains;
-using Eveent_.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using webapi.event_.Contexts;
+using webapi.event_.Domains;
+using webapi.event_.Interfaces;
 
-namespace Eveent_.Repositories
+namespace webapi.event_.Repositories
 {
-    public class EventoRepository : IEventosRepository
+    public class EventosRepository : IEventosRepository
     {
-        private readonly Eveent_Context _context;
+        private readonly Context _context;
 
-        public EventoRepository(Eveent_Context context)
+        public EventosRepository(Context context)
         {
             _context = context;
         }
-
         public void Atualizar(Guid id, Eventos evento)
         {
             try
@@ -21,8 +21,14 @@ namespace Eveent_.Repositories
 
                 if (eventoBuscado != null)
                 {
-                    eventoBuscado.TituloDeEventos = evento.TituloDeEventos;
+                    eventoBuscado.DataEvento = evento.DataEvento;
+                    eventoBuscado.NomeEvento = evento.NomeEvento;
+                    eventoBuscado.Descricao = evento.Descricao;
+                    eventoBuscado.IdTipoEvento = evento.IdTipoEvento;
                 }
+
+                _context.Eventos.Update(eventoBuscado!);
+
                 _context.SaveChanges();
             }
             catch (Exception)
@@ -35,9 +41,22 @@ namespace Eveent_.Repositories
         {
             try
             {
-                Eventos eventoBuscado = _context.Eventos.Find(id)!;
-                return eventoBuscado;
-
+                return _context.Eventos
+                    .Select(e => new Eventos
+                    {
+                        IdEvento = e.IdEvento,
+                        NomeEvento = e.NomeEvento,
+                        Descricao = e.Descricao,
+                        DataEvento = e.DataEvento,
+                        TiposEvento = new TiposEventos
+                        {
+                            TituloTipoEvento = e.TiposEvento!.TituloTipoEvento
+                        },
+                        Instituicao = new Instituicoes
+                        {
+                            NomeFantasia = e.Instituicao!.NomeFantasia
+                        }
+                    }).FirstOrDefault(e => e.IdEvento == id)!;
             }
             catch (Exception)
             {
@@ -45,15 +64,22 @@ namespace Eveent_.Repositories
             }
         }
 
-        public void Cadastrar(Eventos novoEvento)
+        public void Cadastrar(Eventos evento)
         {
             try
             {
-                _context.Eventos.Add(novoEvento);
+                // Verifica se a data do evento é maior que a data atual
+                if (evento.DataEvento < DateTime.Now)
+                {
+                    throw new ArgumentException("A data do evento deve ser maior ou igual a data atual.");
+                }
+
+                evento.IdEvento = Guid.NewGuid();
+
+                _context.Eventos.Add(evento);
 
                 _context.SaveChanges();
             }
-
             catch (Exception)
             {
                 throw;
@@ -83,8 +109,26 @@ namespace Eveent_.Repositories
         {
             try
             {
-                List<Eventos> listaEvento = _context.Eventos.ToList();
-                return listaEvento;
+                return _context.Eventos
+                    .Select(e => new Eventos
+                    {
+                        IdEvento = e.IdEvento,
+                        NomeEvento = e.NomeEvento,
+                        Descricao = e.Descricao,
+                        DataEvento = e.DataEvento,
+                        IdTipoEvento = e.IdTipoEvento,
+                        TiposEvento = new TiposEventos
+                        {
+                            IdTipoEvento = e.IdTipoEvento,
+                            TituloTipoEvento = e.TiposEvento!.TituloTipoEvento
+                        },
+                        IdInstituicao = e.IdInstituicao,
+                        Instituicao = new Instituicoes
+                        {
+                            IdInstituicao = e.IdInstituicao,
+                            NomeFantasia = e.Instituicao!.NomeFantasia
+                        }
+                    }).ToList();
             }
             catch (Exception)
             {
@@ -96,8 +140,34 @@ namespace Eveent_.Repositories
         {
             try
             {
-                List<Eventos> listaEvento = _context.Eventos.Where(p => p.IdEventos == id).ToList();
-                return listaEvento;
+                return _context.Eventos
+                    .Include(e => e.PresencasEventos)
+                    .Select(e => new Eventos
+                    {
+                        IdEvento = e.IdEvento,
+                        NomeEvento = e.NomeEvento,
+                        Descricao = e.Descricao,
+                        DataEvento = e.DataEvento,
+                        IdTipoEvento = e.IdTipoEvento,
+                        TiposEvento = new TiposEventos
+                        {
+                            IdTipoEvento = e.IdTipoEvento,
+                            TituloTipoEvento = e.TiposEvento!.TituloTipoEvento
+                        },
+                        IdInstituicao = e.IdInstituicao,
+                        Instituicao = new Instituicoes
+                        {
+                            IdInstituicao = e.IdInstituicao,
+                            NomeFantasia = e.Instituicao!.NomeFantasia
+                        },
+                        PresencasEventos = new PresencasEventos
+                        {
+                            IdUsuario = e.PresencasEventos!.IdUsuario,
+                            Situacao = e.PresencasEventos!.Situacao
+                        }
+                    })
+                    .Where(e => e.PresencasEventos!.Situacao == true && e.PresencasEventos.IdUsuario == id)
+                    .ToList();
             }
             catch (Exception)
             {
@@ -105,17 +175,39 @@ namespace Eveent_.Repositories
             }
         }
 
-        public List<Eventos> ListarProximosEventos()
+
+        public List<Eventos> ProximosEventos()
         {
             try
             {
-                List<Eventos> listarEventosProximos = _context.Eventos.Where(e => e.DataEvento > DateTime.Now).OrderBy(e => e.DataEvento).ToList();
-                return listarEventosProximos;
+                return _context.Eventos
+                    .Select(e => new Eventos
+                    {
+                        IdEvento = e.IdEvento,
+                        NomeEvento = e.NomeEvento,
+                        Descricao = e.Descricao,
+                        DataEvento = e.DataEvento,
+                        IdTipoEvento = e.IdTipoEvento,
+                        TiposEvento = new TiposEventos
+                        {
+                            IdTipoEvento = e.IdTipoEvento,
+                            TituloTipoEvento = e.TiposEvento!.TituloTipoEvento
+                        },
+                        IdInstituicao = e.IdInstituicao,
+                        Instituicao = new Instituicoes
+                        {
+                            IdInstituicao = e.IdInstituicao,
+                            NomeFantasia = e.Instituicao!.NomeFantasia
+                        }
+
+                    })
+                    .Where(e => e.DataEvento >= DateTime.Now)
+                    .ToList();
             }
             catch (Exception)
             {
                 throw;
-            }   
+            }
         }
     }
 }

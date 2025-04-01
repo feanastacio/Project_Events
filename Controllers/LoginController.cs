@@ -1,13 +1,12 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using api_filmes_senai.Domains;
-using Eveent_.DTO;
-using Eveent_.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using webapi.event_.Domains;
+using webapi.event_.DTO;
+using webapi.event_.Interfaces;
 
-namespace api_filmes_senai.Controllers
+namespace webapi.event_.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -21,57 +20,63 @@ namespace api_filmes_senai.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(loginDTO loginDTO)
+        public IActionResult Login(LoginDTO loginDto)
         {
             try
             {
-                Usuarios usuarioBuscado = _usuarioRepository.BuscarPorEmailESenha(loginDTO.Email!, loginDTO.Senha!);
+                Usuarios usuarioBuscado = _usuarioRepository.BuscarPorEmailESenha(loginDto.Email!, loginDto.Senha!);
 
                 if (usuarioBuscado == null)
                 {
-                    return NotFound("Usuário não encontrado, email ou senha inválidos!");
+                    return NotFound("Email ou Senha Inválidos !");
                 }
+
+                //Caso encontre o usuário , prossegue para a criação do token
+
+                //1º - Definir as informações(Claims) que serão fornecidos no token (PAYLOAD)
                 var claims = new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Jti,usuarioBuscado.ToString()!),
+                    //formato da claim
+                    new Claim(JwtRegisteredClaimNames.Jti,usuarioBuscado.IdUsuario.ToString()),
                     new Claim(JwtRegisteredClaimNames.Email,usuarioBuscado.Email!),
-                    new Claim(JwtRegisteredClaimNames.Name,usuarioBuscado.NomeUsuario!),
                     new Claim("Tipo do usuário", usuarioBuscado.TipoUsuario!.TituloTipoUsuario!),
-
                 };
 
-                var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("eventos-chave-autenticado-webapi-dev"));
+                //2º - Definir a chave de acesso ao token
+                var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("eventos-chave-autenticacao-webapi-dev"));
 
+                //3º - Definir as credenciais do token (HEADER)
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+                //4º - Gerar token
                 var token = new JwtSecurityToken
-                    (
-                        issuer: "Eveent+",
+                (
+                    //emissor do token
+                    issuer: "webapi.event+",
 
-                        audience: "Eveent+",
+                    //destinatário do token
+                    audience: "webapi.event+",
 
-                        claims: claims,
+                    //dados definidos nas claims(informações)
+                    claims: claims,
 
-                        expires: DateTime.Now.AddMinutes(5),
+                    //tempo de expiração do token
+                    expires: DateTime.Now.AddMinutes(5),
 
-                        signingCredentials: creds
-                    );
+                    //credenciais do token
+                    signingCredentials: creds
+                );
 
-                return Ok(
-                    new
-                    {
-                        token = new JwtSecurityTokenHandler().WriteToken(token)
-                    }
-                    );
-
+                //5º - retornar o token criado
+                return Ok(new
+                {
+                    token = new JwtSecurityTokenHandler().WriteToken(token)
+                });
             }
-            catch (Exception e)
+            catch (Exception erro)
             {
-
-                return BadRequest(e.Message);
+                return BadRequest(erro.Message);
             }
-
         }
     }
-
 }

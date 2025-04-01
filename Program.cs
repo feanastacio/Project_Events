@@ -1,15 +1,13 @@
-using System.Reflection;
-using Eveent_.Context;
-using Eveent_.Domains;
-using Eveent_.Interfaces;
-using Eveent_.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
+using webapi.event_.Contexts;
+using webapi.event_.Interfaces;
+using webapi.event_.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services // Acessa a coleção de serviços da aplicação (Dependency Injection)
     .AddControllers() // Adiciona suporte a controladores na API (MVC ou Web API)
     .AddJsonOptions(options => // Configura as opções do serializador JSON padrão (System.Text.Json)
@@ -21,23 +19,21 @@ builder.Services // Acessa a coleção de serviços da aplicação (Dependency Inject
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
-
-
 // Adiciona o contexto do banco de dados (exemplo com SQL Server)
-builder.Services.AddDbContext<Eveent_Context>(options =>
+builder.Services.AddDbContext<Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//Adicionar o repositorio e a interface ao container da injeção de dependencia
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddScoped<IPresencaRepository, PresencasRepository>();
-builder.Services.AddScoped<IEventosRepository, EventoRepository>();
-builder.Services.AddScoped<ITiposEventosRepository, TipoEventoRepository>();
-builder.Services.AddScoped<ITiposUsuariosRepository, TipoUsuarioRepository>();
+//Adiciona o repositório e a interface ao container de injecao de dependência
+builder.Services.AddScoped<ITiposUsuariosRepository, TiposUsuariosRepository>();
+builder.Services.AddScoped<ITiposEventosRepository, TiposEventosRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuariosRepository>();
+builder.Services.AddScoped<IEventosRepository, EventosRepository>();
+builder.Services.AddScoped<IPresencasEventosRepository, PresencasEventosRepository>();
 
-//Adicionar o serviço de controladores
+//Adiciona o serviço de Controllers
 builder.Services.AddControllers();
 
-//Adicionar servico de JWT bearer
+//Adiciona o serviço de JWT Bearer
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultChallengeScheme = "JwtBearer";
@@ -47,18 +43,30 @@ builder.Services.AddAuthentication(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
+        //valida quem está solicitando
         ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("eventos-chave-autenticado-webapi-dev")),
 
+        //valida quem está recebendo
+        ValidateAudience = true,
+
+        //define se o tempo de expiração será validado
+        ValidateLifetime = true,
+
+        //forma de criptografia e validaa chave de autenticação
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("eventos-chave-autenticacao-webapi-dev")),
+
+        //valida o tempo de expiração do token
         ClockSkew = TimeSpan.FromMinutes(5),
 
-        ValidIssuer = "Eveent+",
-        ValidAudience = "Eveent+"
+        //valida de onde está vindo
+        ValidIssuer = "webapi.event+",
+
+        ValidAudience = "webapi.event+"
+
     };
 });
 
+//Adiciona Swagger
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
@@ -66,13 +74,13 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "API de Filmes",
+        Title = "API de Eventos",
         Description = "Aplicação para gerenciamento de eventos",
         TermsOfService = new Uri("https://example.com/terms"),
         Contact = new OpenApiContact
         {
-            Name = "VFernanda Marques",
-            Url = new Uri("https://github.com/ViniPolimeno17")
+            Name = "Fernanda Marques",
+            Url = new Uri("https://www.linkedin.com/in/roquecarlos/")
         },
         License = new OpenApiLicense
         {
@@ -80,7 +88,8 @@ builder.Services.AddSwaggerGen(options =>
             Url = new Uri("https://example.com/license")
         }
     });
-    // using System.Reflection;
+
+    //Configura o Swagger para usar o arquivo XML gerado
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
@@ -111,7 +120,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-// CORS
+// Adiciona CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
@@ -124,6 +133,7 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -139,12 +149,16 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+//Adiciona o Cors(política criada)
 app.UseCors("CorsPolicy");
-//Adicionar o mapeamento dos controllers
+
+//Adiciona o mapeamento dos controllers
 app.MapControllers();
 
+//Adiciona a autenticação
 app.UseAuthentication();
 
+//Adiciona a autorização
 app.UseAuthorization();
 
 app.Run();

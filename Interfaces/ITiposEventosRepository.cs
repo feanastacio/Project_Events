@@ -1,15 +1,13 @@
-﻿using Eveent_.Domains;
+﻿using webapi.event_.Domains;
 
-namespace Eveent_.Interfaces
+namespace webapi.event_.Interfaces
 {
     public interface ITiposEventosRepository
     {
-        void Cadastrar(TiposEventos tiposEventos);
-        void Atualizar(Guid id, TiposEventos tiposEventos);
+        void Cadastrar(TiposEventos tipoEvento);
         void Deletar(Guid id);
-        TiposEventos BuscarPorId(Guid id);
         List<TiposEventos> Listar();
-
+        TiposEventos BuscarPorId(Guid id);
+        void Atualizar(Guid id, TiposEventos tipoEvento);
     }
 }
- 

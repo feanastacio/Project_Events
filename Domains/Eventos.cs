@@ -1,37 +1,38 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Eveent_.Domains
+namespace webapi.event_.Domains
 {
-    [Table("Evento")]
+    [Table("Eventos")]
     public class Eventos
     {
         [Key]
-        public Guid IdEventos { get; set; }
+        public Guid IdEvento { get; set; }
 
-        [Column(TypeName = "VARCHAR(50)")]
-        [Required(ErrorMessage = "O Tipo de eventos é obrigatorio!")]
-        public string? TituloDeEventos { get; set; }
+        [Column(TypeName = "DATE")]
+        [Required(ErrorMessage = "A data do evento é obrigatória!")]
+        public DateTime DataEvento { get; set; }
+
+        [Column(TypeName = "VARCHAR(100)")]
+        [Required(ErrorMessage = "Nome do evento obrigatório!")]
+        public string? NomeEvento { get; set; }
 
         [Column(TypeName = "TEXT")]
-        [Required(ErrorMessage = "Descricao do evento e obrigatorio!")]
+        [Required(ErrorMessage = "Descrição do evento obrigatório!")]
         public string? Descricao { get; set; }
 
-        [Column(TypeName = "DATETIME")]
-        [Required(ErrorMessage = "A data do evento e obrigatorio!")]
-        public DateTime? DataEvento { get; set; }
+        //ref.tabela TiposEventos
+        public Guid IdTipoEvento { get; set; }
 
-        public Presenca? PresencasEvento { get; set; }
+        [ForeignKey("IdTipoEvento")]
+        public TiposEventos? TiposEvento { get; set; }
 
-        public Guid IdTipoEventos { get; set; }
-
-        [ForeignKey("IdTipoEventos")]
-        public TiposEventos? tiposEvento { get; set; }
-
+        //ref.tabela Instituicoes
         public Guid IdInstituicao { get; set; }
 
         [ForeignKey("IdInstituicao")]
         public Instituicoes? Instituicao { get; set; }
+
+        public PresencasEventos? PresencasEventos { get; set; }
     }
 }
- 

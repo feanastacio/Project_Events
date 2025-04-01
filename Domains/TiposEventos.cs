@@ -1,17 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using api_filmes_senai.Domains;
 
-namespace Eveent_.Domains
+namespace webapi.event_.Domains
 {
     [Table("TiposEventos")]
     public class TiposEventos
     {
         [Key]
-        public Guid IdTipoEventos { get; set; }
+        public Guid IdTipoEvento { get; set; }
 
-        [Column(TypeName = "VARCHAR(50)")]
-        [Required(ErrorMessage = "O titulo do tipo de evento e obrigatorio")]
+        [Column(TypeName = "VARCHAR(100)")]
+        [Required(ErrorMessage = "Nome do evento obrigatório!")]
         public string? TituloTipoEvento { get; set; }
     }
 }

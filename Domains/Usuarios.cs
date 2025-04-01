@@ -1,31 +1,33 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Eveent_.Domains;
-using Microsoft.EntityFrameworkCore;
 
-namespace api_filmes_senai.Domains
+namespace webapi.event_.Domains
 {
-    [Table("Usuario")]
+    [Table("Usuarios")]
     [Index(nameof(Email), IsUnique = true)]
     public class Usuarios
     {
         [Key]
         public Guid IdUsuario { get; set; }
 
-        [Column(TypeName = "VARCHAR(50)")]
-        [Required(ErrorMessage = "O nome é obrigatorio!")]
+        [Column(TypeName = "VARCHAR(100)")]
+        [Required(ErrorMessage = "O Nome do usuário é obrigatório!")]
         public string? NomeUsuario { get; set; }
 
-        [Column(TypeName = "VARCHAR(50)")]
-        [Required(ErrorMessage = "O email e obrigatorio!")]
+
+        [Column(TypeName = "VARCHAR(100)")]
+        [Required(ErrorMessage = "O Email do usuário é obrigatório!")]
         public string? Email { get; set; }
 
+
         [Column(TypeName = "VARCHAR(60)")]
-        [Required(ErrorMessage = "A senha e obrigatoria!")]
-        [StringLength(60, MinimumLength = 5, ErrorMessage = "A senha deve conter no minimo 5 carcteres e no maximo 60")]
+        [Required(ErrorMessage = "A senha do usuário é obrigatória!")]
+        [StringLength(60, MinimumLength = 5, ErrorMessage = "A senha deve conter entre 5 e 30 caracteres.")]
         public string? Senha { get; set; }
 
-        [Required(ErrorMessage = "O tipo do usuario e obrigatorio")]
+        //referência para a entidade TiposUsuarios
+        [Required(ErrorMessage = "O tipo do usuário é obrigatório!")]
         public Guid IdTipoUsuario { get; set; }
 
         [ForeignKey("IdTipoUsuario")]
