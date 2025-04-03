@@ -81,7 +81,7 @@ builder.Services.AddSwaggerGen(options =>
         Contact = new OpenApiContact
         {
             Name = "Fernanda Marques",
-            Url = new Uri("https://www.linkedin.com/in/roquecarlos/")
+            Url = new Uri("https://github.com/feanastacio")
         },
         License = new OpenApiLicense
         {
